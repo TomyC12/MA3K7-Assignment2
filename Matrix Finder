@@ -1,0 +1,28 @@
+import itertools
+import numpy as np
+
+iterable = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+r=4
+check = 0
+
+entries = list(itertools.combinations(iterable, r))
+print("$$")
+for i in range(len(entries)):
+    grid = np.zeros((3, 3), dtype=np.int)
+    icase = entries[i]
+    for j in range(r):
+        grid[icase[j] % 3 -1 , icase[j] // 3 -1] = 1
+    det = np.linalg.det(grid)
+    if(det!=0):
+        print("\\begin{pmatrix}")
+        print(grid[0,0],"&",grid[0,1],"&",grid[0,2],"\\\\")
+        print(grid[1,0],"&",grid[1,1],"&",grid[1,2],"\\\\")
+        print(grid[2,0],"&",grid[2,1],"&",grid[2,2])
+        print("\\end{pmatrix}")
+        check += 1
+        if check % 8 == 0:
+            print("$$")
+            print("$$")
+
+print("This is " , check ," distinct matrices. There should be 9 \choose 5 combinations.")
+print("$$")
