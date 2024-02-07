@@ -1,0 +1,40 @@
+import itertools
+import numpy as np
+import math
+
+def calculate_det_zero_count(n):
+    iterable = list(range(n * n))
+    r = math.floor((n * n) / 2)
+    entries = list(itertools.combinations(iterable, r))
+    zerodet = 0
+    count = 0
+
+    for i in range(len(entries)):
+        grid = np.zeros((n, n))
+        icase = entries[i]
+
+        for j in range(r):
+            grid[icase[j] % n, icase[j] // n] = 1
+
+        det = np.linalg.det(grid)
+        count += 1
+
+        if det == 0:
+            zerodet += 1
+
+    # Calculate percentage
+    percentage = (zerodet / count) * 100 if count > 0 else 0
+
+    return zerodet, count, percentage
+
+# Define the range of n values you want to iterate over
+n_values = [2, 3, 4, 5]
+
+# Print table header
+print("n\tZero Det Count\tTotal Count\tPercentage")
+print("-" * 45)
+
+# Iterate over n values and print results in a table
+for n in n_values:
+    zerodet, count, percentage = calculate_det_zero_count(n)
+    print(f"{n}\t{zerodet}\t\t{count}\t\t{percentage:.2f}%")
