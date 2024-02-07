@@ -1,0 +1,88 @@
+import itertools
+import numpy as np
+import matplotlib.pyplot as plt
+import math  # Don't forget to import math
+
+def calculate_det_zero_count1(n):
+    iterable = list(range(n * n))
+    r = math.ceil((n * n) / 2)
+    entries = list(itertools.combinations(iterable, r))
+    zerodet = 0
+    count = 0
+
+    for i in range(len(entries)):
+        grid = np.zeros((n, n))
+        icase = entries[i]
+
+        for j in range(r):
+            grid[icase[j] % n, icase[j] // n] = 1
+
+        det = np.linalg.det(grid)
+        count += 1
+
+        if det == 0:
+            zerodet += 1
+
+    # Calculate percentage
+    percentage = (zerodet / count) * 100 if count > 0 else 0
+
+    return zerodet, count, percentage
+
+def calculate_det_zero_count2(n):
+    iterable = list(range(n * n))
+    r = math.floor((n * n) / 2)
+    entries = list(itertools.combinations(iterable, r))
+    zerodet = 0
+    count = 0
+
+    for i in range(len(entries)):
+        grid = np.zeros((n, n))
+        icase = entries[i]
+
+        for j in range(r):
+            grid[icase[j] % n, icase[j] // n] = 1
+
+        det = np.linalg.det(grid)
+        count += 1
+
+        if det == 0:
+            zerodet += 1
+
+    # Calculate percentage
+    percentage = (zerodet / count) * 100 if count > 0 else 0
+
+    return zerodet, count, percentage
+
+# Define the range of n values you want to iterate over
+n_values = [2, 3, 4, 5]
+
+# Initialize lists to store results
+zerodet_list, count_list, percentage_list = [], [], []
+zerodet_list2, count_list2, percentage_list2 = [], [], []
+
+# Iterate over n values and store results
+for n in n_values:
+    zerodet, count, percentage = calculate_det_zero_count1(n)
+    zerodet_list.append(zerodet)
+    count_list.append(count)
+    percentage_list.append(percentage)
+
+    zerodet2, count2, percentage2 = calculate_det_zero_count2(n)
+    zerodet_list2.append(zerodet2)
+    count_list2.append(count2)
+    percentage_list2.append(percentage2)
+
+# Plotting the results
+plt.figure(figsize=(10, 6))
+
+# Plotting Percentage
+plt.plot(n_values, percentage_list, marker='o', label='Player 2 moves first')
+plt.plot(n_values, percentage_list2, marker='o', label='Player 1 moves first')
+
+# Adding labels and title
+plt.xlabel('n')
+plt.ylabel('Percentage with zero det')
+plt.title('Percentage vs. n')
+plt.legend()
+plt.grid(True)
+plt.show()
