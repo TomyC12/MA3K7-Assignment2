@@ -1,0 +1,30 @@
+def generate_combinations(player1_numbers, player2_numbers, sequence):
+    if len(player1_numbers) == 4 and len(player2_numbers) == 5:
+        print(f"Player 1 picked: {player1_numbers}")
+        print(f"Player 2 picked: {player2_numbers}")
+        return
+
+    if not sequence:
+        return
+
+    smallest_number = min(sequence)
+    player1_numbers.append(smallest_number)
+
+    remaining_numbers = [x for x in sequence if x != smallest_number]
+
+    generate_combinations(player1_numbers.copy(), player2_numbers.copy(), remaining_numbers)
+    player1_numbers.pop()
+
+    for num in sequence:
+        player2_numbers.append(num)
+        remaining_numbers = [x for x in sequence if x > num]
+        generate_combinations(player1_numbers.copy(), player2_numbers.copy(), remaining_numbers)
+        player2_numbers.pop()
+
+
+if __name__ == "__main__":
+    numbers = list(range(1, 10))
+    player1_numbers = []
+    player2_numbers = []
+
+    generate_combinations(player1_numbers, player2_numbers, numbers)
