@@ -1,0 +1,47 @@
+def generate_combinations(player1_numbers, player2_numbers, sequence, winconditions, counts):
+    if len(player1_numbers) == 4 and len(player2_numbers) == 5:
+        check_result(player1_numbers, winconditions, counts)
+        return
+
+    if not sequence:
+        return
+
+    # Player 1 picks numbers 1, 2, 3, and 4
+    for num in sequence[:4]:
+        player1_numbers.append(num)
+        remaining_numbers = [x for x in sequence if x > num]
+        generate_combinations(player1_numbers.copy(), player2_numbers.copy(), remaining_numbers, winconditions, counts)
+        player1_numbers.pop()
+
+    # Player 2's turn
+    for num in sequence:
+        player2_numbers.append(num)
+        remaining_numbers = [x for x in sequence if x > num]
+        generate_combinations(player1_numbers.copy(), player2_numbers.copy(), remaining_numbers, winconditions, counts)
+        player2_numbers.pop()
+
+
+def check_result(player_numbers, winconditions, counts):
+    for condition in winconditions:
+        if set(condition).issubset(player_numbers):
+            counts[0] += 1
+            return
+
+    counts[1] += 1
+
+
+if __name__ == "__main__":
+    numbers = list(range(1, 10))
+    winconditions = [(1, 2, 3), (4, 5, 6), (7, 8, 9), (1, 4, 7), (2, 5, 8), (3, 6, 9),
+                     (1, 3, 7, 9), (1, 2, 4, 5), (2, 3, 5, 6), (4, 5, 7, 8), (5, 6, 8, 9),
+                     (1, 3, 5, 8), (1, 5, 6, 7), (2, 5, 7, 9), (3, 4, 5, 9), (2, 3, 4, 7),
+                     (1, 2, 6, 9), (3, 6, 7, 8), (1, 4, 8, 9)]
+
+    player1_numbers = []
+    player2_numbers = []
+    counts = [0, 0]  # [winning_count, losing_count]
+
+    generate_combinations(player1_numbers, player2_numbers, numbers, winconditions, counts)
+
+    print(f"Total winning combinations: {counts[0]}")
+    print(f"Total losing combinations: {counts[1]}")
